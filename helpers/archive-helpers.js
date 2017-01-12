@@ -12,7 +12,9 @@ var _ = require('underscore');
 exports.paths = {
   siteAssets: path.join(__dirname, '../web/public'),
   archivedSites: path.join(__dirname, '../archives/sites'),
-  list: path.join(__dirname, '../archives/sites.txt')
+  list: path.join(__dirname, '../archives/sites.txt'),
+  testArchives: path.join(__dirname, '../test/testdata/sites'),
+  testList: path.join(__dirname, '../test/testdata/sites.txt')
 };
 
 // Used for stubbing paths for tests, do not modify
@@ -73,12 +75,12 @@ exports.isUrlArchived = function(url, callback) {
 
 exports.downloadUrls = function(array) {
 
-  fs.readdir(exports.paths.archivedSites, function(err, data) {
-    if (err) { throw err; }
-    // array.forEach(function(path) {
-    //   if (data.indexOf(path) === -1) {
-    //     data.push(path);
-    //   }
-    // });
+  array.forEach(function(site) {
+
+    fs.writeFile(exports.paths.archivedSites + '/' + site, function(err) {
+      if (err) { console.log(err, 'ERROR'); }
+    });
+      // }
   });
+
 };

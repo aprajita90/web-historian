@@ -57,7 +57,6 @@ describe('server', function() {
       it('should append submitted sites to \'sites.txt\'', function(done) {
         var url = 'www.example.com';
         // Reset the test file and process request
-        // console.log(archive.paths.list, "ARCHIVE");
         fs.closeSync(fs.openSync(archive.paths.list, 'w'));
         request
           .post('/')
@@ -66,7 +65,6 @@ describe('server', function() {
           .expect(302, function (err) {
             if (!err) {
               var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
-              console.log(fileContents, "FILE CONTENTS");
               expect(fileContents).to.equal(url + '\n');
             }
 
@@ -179,10 +177,10 @@ describe('archive helpers', function() {
     it('should download all pending urls in the list', function (done) {
       var urlArray = ['www.example.com', 'www.google.com'];
       archive.downloadUrls(urlArray);
-
       // Ugly hack to wait for all downloads to finish.
       setTimeout(function () {
         expect(fs.readdirSync(archive.paths.archivedSites)).to.deep.equal(urlArray);
+
         done();
       }, 500);
     });
