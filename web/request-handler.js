@@ -30,17 +30,26 @@ exports.handleRequest = function (req, res) {
   if (req.method === 'POST') {
     var body = '';
     req.on('data', function(data) {
-
-      body += data.toString();
+      console.log(archive.paths.list, "ARCHIVE PATH LIST");
+      body += data;
     });
     req.on('end', function() {
       body = qs.parse(body);
-      console.log(body.url);
+      fs.writeFile('/Users/student/Desktop/hrsf53-web-historian/test/testdata/sites.txt', body.url + '\n', function(err) {
+        console.log(body.url);
+        if (err) { throw err; }
+        res.writeHead(302);
+        console.log("success");
+        res.end();
+      });
     });
-    fs.writeFile('/Users/student/Desktop/hrsf53-web-historian/test/testdata/sites.txt', body.url, function(err, data) {
-      if (err) { throw err; }
-      res.writeHead(302);
-      res.end();
+    fs.readFile('/Users/student/Desktop/hrsf53-web-historian/test/testdata/sites.txt', function(error, data) {
+      if (error) { throw error; }
+      console.log(data.toString('utf8'));
     });
+    // archive.addUrlToList(body.url, function(error, data) {
+    //   if (error) { throw error; }
+    //   console.log(data, "DATA");
+    // });
   }
 };

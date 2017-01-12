@@ -5,6 +5,7 @@ var archive = require('../helpers/archive-helpers');
 var path = require('path');
 var supertest = require('supertest');
 var initialize = require('../web/initialize.js');
+var qs = require('querystring');
 
 initialize(path.join(__dirname, '/testdata'));
 
@@ -56,8 +57,8 @@ describe('server', function() {
       it('should append submitted sites to \'sites.txt\'', function(done) {
         var url = 'www.example.com';
         // Reset the test file and process request
+        // console.log(archive.paths.list, "ARCHIVE");
         fs.closeSync(fs.openSync(archive.paths.list, 'w'));
-        console.log(archive.paths.list, "ARCHIVE PATH LIST");
         request
           .post('/')
           .type('form')
@@ -66,7 +67,6 @@ describe('server', function() {
             if (!err) {
               var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
               console.log(fileContents, "FILE CONTENTS");
-
               expect(fileContents).to.equal(url + '\n');
             }
 
