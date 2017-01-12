@@ -97,10 +97,12 @@ describe('archive helpers', function() {
       var urlArray = ['example1.com', 'example2.com'];
       fs.writeFileSync(archive.paths.list, urlArray.join('\n'));
 
+
       var counter = 0;
       var total = 2;
 
       archive.isUrlInList('example1.com', function (err, exists) {
+
         if (!err) {
           expect(err).to.be.null;
           expect(exists).to.be.true;
@@ -146,7 +148,6 @@ describe('archive helpers', function() {
   describe('#isUrlArchived', function () {
     it('should check if a url is archived', function (done) {
       fs.writeFileSync(archive.paths.archivedSites + '/www.example.com', 'blah blah');
-
       var counter = 0;
       var total = 2;
 

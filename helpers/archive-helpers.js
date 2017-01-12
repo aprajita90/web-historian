@@ -25,17 +25,61 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function() {
+exports.readListOfUrls = function(callback) {
+  fs.readFile(exports.paths.list, function(err, data) {
+    if (err) {
+      throw err;
+    }
+    callback(err, data.toString().split('\n'));
+  });
 };
 
-exports.isUrlInList = function() {
+exports.isUrlInList = function(url, callback) {
+  fs.readFile(exports.paths.list, function(err, data) {
+    if (err) {
+      throw err;
+    }
+    data = data.toString().split('\n');
+    var check = false;
+    if (data.indexOf(url) !== -1) {
+      check = true;
+    }
+    callback(err, check);
+  });
 };
 
-exports.addUrlToList = function() {
+exports.addUrlToList = function(url, callback) {
+  fs.writeFile(exports.paths.list, url, function(err) {
+    if (err) {
+      throw err;
+    }
+    callback();
+  });
+
 };
 
-exports.isUrlArchived = function() {
+exports.isUrlArchived = function(url, callback) {
+    
+  fs.readFile(exports.paths.archivedSites + '/' + url, function(err, data) {
+    var check = false;
+    if (err) {
+      callback(null, check);
+    } else {
+      check = true;
+      callback(err, check);
+    }
+  });
 };
 
-exports.downloadUrls = function() {
+exports.downloadUrls = function(array) {
+
+  fs.readdir(exports.paths.archivedSites, function(err, data) {
+    if (err) { throw err; }
+    console.log(typeof data, " DOWNLOAD URLS ");
+    // array.forEach(function(path) {
+    //   if (data.indexOf(path) === -1) {
+    //     data.push(path);
+    //   }
+    // });
+  });
 };
