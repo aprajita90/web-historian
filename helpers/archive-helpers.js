@@ -75,7 +75,6 @@ exports.downloadUrls = function(array) {
 
   fs.readdir(exports.paths.archivedSites, function(err, data) {
     if (err) { throw err; }
-    console.log(typeof data, " DOWNLOAD URLS ");
     // array.forEach(function(path) {
     //   if (data.indexOf(path) === -1) {
     //     data.push(path);

@@ -20,7 +20,7 @@ describe('server', function() {
     it('should return the content of index.html', function (done) {
       // just assume that if it contains an <input> tag its index.html
       request
-        .get('/')
+        .get('/ ')
         .expect(200, /<input/, done);
     });
   });
@@ -55,10 +55,9 @@ describe('server', function() {
     describe('POST', function () {
       it('should append submitted sites to \'sites.txt\'', function(done) {
         var url = 'www.example.com';
-
         // Reset the test file and process request
         fs.closeSync(fs.openSync(archive.paths.list, 'w'));
-
+        console.log(archive.paths.list, "ARCHIVE PATH LIST");
         request
           .post('/')
           .type('form')
@@ -66,6 +65,8 @@ describe('server', function() {
           .expect(302, function (err) {
             if (!err) {
               var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
+              console.log(fileContents, "FILE CONTENTS");
+
               expect(fileContents).to.equal(url + '\n');
             }
 
