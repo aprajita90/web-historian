@@ -3,6 +3,7 @@ var archive = require('../helpers/archive-helpers');
 var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
+var htmlfetcher = require('../workers/htmlfetcher.js');
 // require more modules/folders here!
 
 exports.handleRequest = function (req, res) {
@@ -14,7 +15,7 @@ exports.handleRequest = function (req, res) {
         res.end(data);
       });
     } else {
-      fs.readFile(archive.paths.testArchives + '/' + urlPath, function(err, data) {
+      fs.readFile(archive.paths.archivedSites + '/' + urlPath, function(err, data) {
         if (err) { 
           res.writeHead(404);
           res.end();
@@ -30,13 +31,18 @@ exports.handleRequest = function (req, res) {
     });
     req.on('end', function() {
       body = qs.parse(body);
-      fs.writeFile(archive.paths.testList, body.url + '\n', function(err) {
+      archive.createArchive(body.url);
+      htmlfetcher.fetch();
+      fs.writeFile(archive.paths.list, body.url + '\n', function(err) {
         if (err) { throw err; }
         res.writeHead(302);
-        res.end();
+        var currentUrl = body.url;
+        // console.log(fs.readFileSync(archive.paths.archivedSites + '/' + body.url));
+        var data = fs.readFileSync(archive.paths.archivedSites + '/' + currentUrl);
+        res.end(data);
       });
     });
-    fs.readFile(archive.paths.testList, function(error, data) {
+    fs.readFile(archive.paths.list, function(error, data) {
       if (error) { throw error; }
     });
   }
